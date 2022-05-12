@@ -43,6 +43,9 @@ export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count
   console.log(`simd = ${simd}`)
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
+  console.log(`N = ${n}`)
+  console.log(`K = ${k}`)
+  console.log(`M = ${m}`)
 
   for (let i = 0; i < warmup; i++) {
     const left_array = create_random_array(n * k)
@@ -99,6 +102,9 @@ export async function tfjs_webgl_benchmark(n: number, k: number, m: number,
   console.log("TFJS WEBGL")
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
+  console.log(`N = ${n}`)
+  console.log(`K = ${k}`)
+  console.log(`M = ${m}`)
 
   for (let i = 0; i < warmup; i++) {
     const left_array = create_random_array(n * k)
@@ -155,6 +161,9 @@ export async function tfjs_cpu_benchmark(n: number, k: number, m: number,
   console.log("TFJS CPU")
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
+  console.log(`N = ${n}`)
+  console.log(`K = ${k}`)
+  console.log(`M = ${m}`)
 
   for (let i = 0; i < warmup; i++) {
     const left_array = create_random_array(n * k)

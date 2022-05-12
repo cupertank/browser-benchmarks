@@ -11,6 +11,10 @@ export async function ort_webgl_benchmark(n: number, k: number, m: number,
   ort.env.webgl.pack = true
   ort.env.webgl.textureCacheMode = "full"
 
+  console.log(`N = ${n}`)
+  console.log(`K = ${k}`)
+  console.log(`M = ${m}`)
+
   const session = await ort.InferenceSession.create("./model.onnx", { executionProviders: ["webgl"] })
 
   for (let i = 0; i < warmup; i++) {
@@ -76,6 +80,11 @@ export async function ort_wasm_benchmark(n: number, k: number, m: number, count:
 
   console.log(`threads = ${ort.env.wasm.numThreads}`)
   console.log(`simd = ${ort.env.wasm.simd}`);
+  console.log(`count = ${count}`)
+  console.log(`warmup = ${warmup}`)
+  console.log(`N = ${n}`)
+  console.log(`K = ${k}`)
+  console.log(`M = ${m}`)
 
   for (let i = 0; i < warmup; i++) {
     let left_array = create_random_array(n * k)
