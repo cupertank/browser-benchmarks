@@ -1,0 +1,41 @@
+{
+  "name": "Browser-benchmarks",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": "",
+  "license": "Apache 2.0",
+  "author": "Ilya Vologin",
+  "scripts": {
+    "build": "npm run clean && parcel build index.html",
+    "dev": "parcel index.html --port 8081 --open 'google chrome'",
+    "start": "npm run build && npm run dev",
+    "clean": "npx rimraf dist .parcel-cache"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.4.1",
+    "parcel-reporter-copy-file-v2": "^1.0.1",
+    "process": "^0.11.10",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^3.16.0",
+    "@tensorflow/tfjs-backend-cpu": "^3.16.0",
+    "@tensorflow/tfjs-backend-wasm": "^3.16.0",
+    "@tensorflow/tfjs-backend-webgl": "^3.16.0",
+    "@tensorflow/tfjs-layers": "^3.16.0",
+    "onnxruntime-web": "^1.11.0"
+  },
+  "browserslist": [
+    "last 3 and_chr versions",
+    "last 3 chrome versions",
+    "last 3 opera versions",
+    "last 3 ios_saf versions",
+    "last 3 safari versions"
+  ],
+  "copyStaticFiles": [
+    "node_modules/@tensorflow/tfjs-backend-wasm/dist/*.wasm",
+    "node_modules/onnxruntime-web/dist/*.wasm",
+    "model/*"
+  ]
+}
