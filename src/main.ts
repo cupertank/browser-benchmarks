@@ -67,5 +67,5 @@ document.getElementById("ort-webgl").onclick = async _ => {
 
 get_threads().then((threads) => {
   tfjs_cpu_count_field.valueAsNumber = threads
-  ort_cpu_count_field.valueAsNumber = threads
+  ort_cpu_count_field.valueAsNumber = navigator.hardwareConcurrency
 })
