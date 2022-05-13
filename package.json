@@ -6,7 +6,7 @@
   "license": "Apache 2.0",
   "author": "Ilya Vologin",
   "scripts": {
-    "build": "npm run clean && parcel build index.html --public-url ./browser-benchmarks/",
+    "build": "npm run clean && parcel build index.html --no-optimize --public-url ./browser-benchmarks/",
     "build-dev": "npm run clean && parcel build --no-optimize index.html",
     "dev": "parcel index.html --port 8081 --open 'google chrome'",
     "start": "npm run build-dev && npm run dev",
