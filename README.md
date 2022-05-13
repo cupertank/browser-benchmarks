@@ -1,5 +1,10 @@
 # Browser benchmarks
-## Installation dependencies
+
+### You can run tests on your device on [this](https://cupertank.github.io/browser-benchmarks/) page
+
+## Local starting
+
+### Installation dependencies
 
 For installation dependencies run in project root
 
@@ -7,7 +12,7 @@ For installation dependencies run in project root
 npm i
 ```
 
-## Run
+### Run
 
 For start project local run in project root
 
@@ -15,7 +20,7 @@ For start project local run in project root
 npm run start
 ```
 
-## Usage
+### Usage
 
 To run a benchmark:
 1. Set the parameters on the page
@@ -23,5 +28,5 @@ To run a benchmark:
 3. Open browser console
 4. After running the benchmark, the results will be in the console
 
-## Example
+### Example
 ![Example](img/example.png "Example")
