@@ -16,6 +16,8 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
+      - name: Remove cache
+        run: rm -rf dist .parcel-cache
       - name: Build
         run: npm run build
       - name: Deploy
