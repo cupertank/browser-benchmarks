@@ -1,45 +1,41 @@
-import * as tf from "@tensorflow/tfjs-core";
-import {setThreadsCount, getThreadsCount} from "@tensorflow/tfjs-backend-wasm";
-import {create_random_array} from "./CommonFunctions"
+import * as tf from '@tensorflow/tfjs-core'
+import * as tfw from '@tensorflow/tfjs-backend-wasm'
+import { create_random_array } from './CommonFunctions'
 
+import '@tensorflow/tfjs-backend-cpu'
+import '@tensorflow/tfjs-backend-webgl'
 
-import "@tensorflow/tfjs-backend-cpu";
-import "@tensorflow/tfjs-backend-webgl";
-import "@tensorflow/tfjs-backend-wasm";
+const wasm_factory = tf.findBackendFactory('wasm')
 
-const wasm_factory = tf.findBackendFactory("wasm")
-
-export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count: number, warmup: number,
-                                          threads: number, simd: boolean): Promise<{ avg: number, interval: number }> {
-
+export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count: number, warmup: number, threads: number, simd: boolean): Promise<{ avg: number, interval: number }> {
   if (simd && threads > 1) {
-    tf.env().set("WASM_HAS_SIMD_SUPPORT", true)
-    tf.env().set("WASM_HAS_MULTITHREAD_SUPPORT", true)
+    tf.env().set('WASM_HAS_SIMD_SUPPORT', true)
+    tf.env().set('WASM_HAS_MULTITHREAD_SUPPORT', true)
   } else if (simd) {
-    tf.env().set("WASM_HAS_SIMD_SUPPORT", true)
-    tf.env().set("WASM_HAS_MULTITHREAD_SUPPORT", false)
+    tf.env().set('WASM_HAS_SIMD_SUPPORT', true)
+    tf.env().set('WASM_HAS_MULTITHREAD_SUPPORT', false)
   } else if (threads > 1) {
-    console.log("In TJFS multithreading works only with SIMD.\nEnable SIMD please!")
+    console.log('In TJFS multithreading works only with SIMD.\nEnable SIMD please!')
     return {
       avg: -1,
       interval: -1
-    };
+    }
   } else {
-    tf.env().set("WASM_HAS_SIMD_SUPPORT", false)
-    tf.env().set("WASM_HAS_MULTITHREAD_SUPPORT", false)
+    tf.env().set('WASM_HAS_SIMD_SUPPORT', false)
+    tf.env().set('WASM_HAS_MULTITHREAD_SUPPORT', false)
   }
 
-  tf.removeBackend("wasm")
-  tf.registerBackend("wasm", wasm_factory)
+  tf.removeBackend('wasm')
+  tf.registerBackend('wasm', wasm_factory)
 
-  setThreadsCount(threads)
-  await tf.setBackend("wasm")
+  tfw.setThreadsCount(threads)
+  await tf.setBackend('wasm')
 
-  console.log("TFJS WASM")
-  if (threads > getThreadsCount()) {
-    console.log(`Max num of threads for TFJS = ${getThreadsCount()}`)
+  console.log('TFJS WASM')
+  if (threads > tfw.getThreadsCount()) {
+    console.log(`Max num of threads for TFJS = ${tfw.getThreadsCount()}`)
   }
-  console.log(`threads = ${getThreadsCount()}`)
+  console.log(`threads = ${tfw.getThreadsCount()}`)
   console.log(`simd = ${simd}`)
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
@@ -61,7 +57,7 @@ export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count
     dest.dispose()
   }
 
-  const times = new Array<number>(count);
+  const times = new Array<number>(count)
   for (let i = 0; i < count; i++) {
     const left_array = create_random_array(n * k)
     const left = tf.tensor(left_array, [n, k])
@@ -73,21 +69,21 @@ export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count
     const dest = tf.matMul(left, right)
     const end = performance.now()
 
-    times[i] = end - start;
+    times[i] = end - start
 
     left.dispose()
     right.dispose()
     dest.dispose()
   }
 
-  const sum_time = times.reduce((sum, current) => sum + current, 0);
-  const avg_time = sum_time / count;
+  const sum_time = times.reduce((sum, current) => sum + current, 0)
+  const avg_time = sum_time / count
 
   const standard_deviation = Math.sqrt(
     times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / count
   )
-  const sem = standard_deviation / Math.sqrt(count);
-  const confidence_interval = 1.96 * sem;
+  const sem = standard_deviation / Math.sqrt(count)
+  const confidence_interval = 1.96 * sem
 
   return {
     avg: avg_time,
@@ -95,11 +91,10 @@ export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count
   }
 }
 
-export async function tfjs_webgl_benchmark(n: number, k: number, m: number,
-                                           count: number, warmup: number): Promise<{ avg: number, interval: number }> {
-  await tf.setBackend("webgl")
+export async function tfjs_webgl_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<{ avg: number, interval: number }> {
+  await tf.setBackend('webgl')
 
-  console.log("TFJS WEBGL")
+  console.log('TFJS WEBGL')
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
   console.log(`N = ${n}`)
@@ -120,7 +115,7 @@ export async function tfjs_webgl_benchmark(n: number, k: number, m: number,
     dest.dispose()
   }
 
-  const times = new Array<number>(count);
+  const times = new Array<number>(count)
   for (let i = 0; i < count; i++) {
     const left_array = create_random_array(n * k)
     const left = tf.tensor(left_array, [n, k])
@@ -132,21 +127,21 @@ export async function tfjs_webgl_benchmark(n: number, k: number, m: number,
     const dest = tf.matMul(left, right)
     const end = performance.now()
 
-    times[i] = end - start;
+    times[i] = end - start
 
     left.dispose()
     right.dispose()
     dest.dispose()
   }
 
-  const sum_time = times.reduce((sum, current) => sum + current, 0);
-  const avg_time = sum_time / count;
+  const sum_time = times.reduce((sum, current) => sum + current, 0)
+  const avg_time = sum_time / count
 
   const standard_deviation = Math.sqrt(
     times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / count
   )
-  const sem = standard_deviation / Math.sqrt(count);
-  const confidence_interval = 1.96 * sem;
+  const sem = standard_deviation / Math.sqrt(count)
+  const confidence_interval = 1.96 * sem
 
   return {
     avg: avg_time,
@@ -154,11 +149,10 @@ export async function tfjs_webgl_benchmark(n: number, k: number, m: number,
   }
 }
 
-export async function tfjs_cpu_benchmark(n: number, k: number, m: number,
-                                         count: number, warmup: number): Promise<{ avg: number, interval: number }> {
-  await tf.setBackend("cpu")
+export async function tfjs_cpu_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<{ avg: number, interval: number }> {
+  await tf.setBackend('cpu')
 
-  console.log("TFJS CPU")
+  console.log('TFJS CPU')
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
   console.log(`N = ${n}`)
@@ -179,7 +173,7 @@ export async function tfjs_cpu_benchmark(n: number, k: number, m: number,
     dest.dispose()
   }
 
-  const times = new Array<number>(count);
+  const times = new Array<number>(count)
   for (let i = 0; i < count; i++) {
     const left_array = create_random_array(n * k)
     const left = tf.tensor(left_array, [n, k])
@@ -191,21 +185,21 @@ export async function tfjs_cpu_benchmark(n: number, k: number, m: number,
     const dest = tf.matMul(left, right)
     const end = performance.now()
 
-    times[i] = end - start;
+    times[i] = end - start
 
     left.dispose()
     right.dispose()
     dest.dispose()
   }
 
-  const sum_time = times.reduce((sum, current) => sum + current, 0);
-  const avg_time = sum_time / count;
+  const sum_time = times.reduce((sum, current) => sum + current, 0)
+  const avg_time = sum_time / count
 
   const standard_deviation = Math.sqrt(
     times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / count
   )
-  const sem = standard_deviation / Math.sqrt(count);
-  const confidence_interval = 1.96 * sem;
+  const sem = standard_deviation / Math.sqrt(count)
+  const confidence_interval = 1.96 * sem
 
   return {
     avg: avg_time,
@@ -214,6 +208,6 @@ export async function tfjs_cpu_benchmark(n: number, k: number, m: number,
 }
 
 export async function get_threads(): Promise<number> {
-  await tf.setBackend("wasm");
-  return getThreadsCount();
+  await tf.setBackend('wasm')
+  return tfw.getThreadsCount()
 }
