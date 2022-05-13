@@ -6,6 +6,14 @@ import '@tensorflow/tfjs-backend-cpu'
 import '@tensorflow/tfjs-backend-webgl'
 
 const wasm_factory = tf.findBackendFactory('wasm')
+tfw.setWasmPaths({
+  // @ts-ignore
+  'tfjs-backend-wasm.wasm': new URL('../node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm.wasm', import.meta.url).toString(),
+  // @ts-ignore
+  'tfjs-backend-wasm-simd.wasm': new URL('../node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm', import.meta.url).toString(),
+  // @ts-ignore
+  'tfjs-backend-wasm-threaded-simd.wasm': new URL('../node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm', import.meta.url).toString()
+})
 
 export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count: number, warmup: number, threads: number, simd: boolean): Promise<{ avg: number, interval: number }> {
   if (simd && threads > 1) {

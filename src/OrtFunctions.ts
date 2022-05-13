@@ -1,6 +1,20 @@
 import * as ort from 'onnxruntime-web'
 import { create_random_array } from './CommonFunctions'
 
+ort.env.wasm.wasmPaths = {
+  // @ts-ignore
+  'ort-wasm.wasm': new URL('../node_modules/onnxruntime-web/dist/ort-wasm.wasm', import.meta.url).toString(),
+  // @ts-ignore
+  'ort-wasm-simd.wasm': new URL('../node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm', import.meta.url).toString(),
+  // @ts-ignore
+  'ort-wasm-threaded.wasm': new URL('../node_modules/onnxruntime-web/dist/ort-wasm-threaded.wasm', import.meta.url).toString(),
+  // @ts-ignore
+  'ort-wasm-simd-threaded.wasm': new URL('../node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded.wasm', import.meta.url).toString()
+}
+
+// @ts-ignore
+const model_path = new URL('../model/model.onnx', import.meta.url).toString()
+
 export async function ort_webgl_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<{ avg: number, interval: number }> {
   console.log('ORT WEBGL')
   console.log(`count = ${count}`)
@@ -14,7 +28,7 @@ export async function ort_webgl_benchmark(n: number, k: number, m: number, count
   console.log(`K = ${k}`)
   console.log(`M = ${m}`)
 
-  const session = await ort.InferenceSession.create('./model.onnx', { executionProviders: ['webgl'] })
+  const session = await ort.InferenceSession.create(model_path, { executionProviders: ['webgl'] })
 
   for (let i = 0; i < warmup; i++) {
     const left_array = create_random_array(n * k)
@@ -74,7 +88,7 @@ export async function ort_wasm_benchmark(n: number, k: number, m: number, count:
   ort.env.wasm.numThreads = threads
   ort.env.wasm.simd = simd
 
-  const session = await ort.InferenceSession.create('./model.onnx', { executionProviders: ['wasm'] })
+  const session = await ort.InferenceSession.create(model_path, { executionProviders: ['wasm'] })
 
   console.log(`threads = ${ort.env.wasm.numThreads}`)
   console.log(`simd = ${ort.env.wasm.simd}`)

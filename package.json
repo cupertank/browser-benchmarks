@@ -6,9 +6,10 @@
   "license": "Apache 2.0",
   "author": "Ilya Vologin",
   "scripts": {
-    "build": "npm run clean && parcel build index.html",
+    "build": "npm run clean && parcel build index.html --public-url ./browser-benchmarks/",
+    "build-dev": "npm run clean && parcel build --no-optimize index.html",
     "dev": "parcel index.html --port 8081 --open 'google chrome'",
-    "start": "npm run build && npm run dev",
+    "start": "npm run build-dev && npm run dev",
     "lint": "npx eslint src/**",
     "clean": "npx rimraf dist .parcel-cache"
   },
@@ -22,7 +23,6 @@
     "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "parcel": "^2.4.1",
-    "parcel-reporter-copy-file-v2": "^1.0.1",
     "process": "^0.11.10",
     "rimraf": "^3.0.2"
   },
@@ -32,6 +32,7 @@
     "@tensorflow/tfjs-backend-wasm": "^3.16.0",
     "@tensorflow/tfjs-backend-webgl": "^3.16.0",
     "@tensorflow/tfjs-layers": "^3.16.0",
+    "coi-serviceworker": "^0.1.6",
     "onnxruntime-web": "^1.11.0"
   },
   "browserslist": [
@@ -40,10 +41,5 @@
     "last 3 opera versions",
     "last 3 ios_saf versions",
     "last 3 safari versions"
-  ],
-  "copyStaticFiles": [
-    "node_modules/@tensorflow/tfjs-backend-wasm/dist/*.wasm",
-    "node_modules/onnxruntime-web/dist/*.wasm",
-    "model/*"
   ]
 }
