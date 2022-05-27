@@ -1,5 +1,5 @@
 import * as ort from 'onnxruntime-web'
-import { create_random_array } from './CommonFunctions'
+import { calculate_mean_confidence_interval, create_random_array, Statistics } from './CommonFunctions'
 
 ort.env.wasm.wasmPaths = {
   // @ts-ignore
@@ -15,7 +15,7 @@ ort.env.wasm.wasmPaths = {
 // @ts-ignore
 const model_path = new URL('../model/model.onnx', import.meta.url).toString()
 
-export async function ort_webgl_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<{ avg: number, interval: number }> {
+export async function ort_webgl_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<Statistics> {
   console.log('ORT WEBGL')
   console.log(`count = ${count}`)
   console.log(`warmup = ${warmup}`)
@@ -67,22 +67,24 @@ export async function ort_webgl_benchmark(n: number, k: number, m: number, count
     times[i] = end - start
   }
 
-  const sum_time = times.reduce((sum, current) => sum + current, 0)
-  const avg_time = sum_time / count
+  return calculate_mean_confidence_interval(times)
 
-  const standard_deviation = Math.sqrt(
-    times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / count
-  )
-  const sem = standard_deviation / Math.sqrt(count)
-  const confidence_interval = 1.96 * sem
-
-  return {
-    avg: avg_time,
-    interval: confidence_interval
-  }
+  // const sum_time = times.reduce((sum, current) => sum + current, 0)
+  // const avg_time = sum_time / count
+  //
+  // const standard_deviation = Math.sqrt(
+  //   times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / (count - 1)
+  // )
+  // const sem = standard_deviation / Math.sqrt(count)
+  // const confidence_interval = 1.96 * sem
+  //
+  // return {
+  //   avg: avg_time,
+  //   interval: confidence_interval
+  // }
 }
 
-export async function ort_wasm_benchmark(n: number, k: number, m: number, count: number, warmup: number, threads: number, simd: boolean): Promise<{ avg: number, interval: number }> {
+export async function ort_wasm_benchmark(n: number, k: number, m: number, count: number, warmup: number, threads: number, simd: boolean): Promise<Statistics> {
   console.log('ORT WASM')
 
   ort.env.wasm.numThreads = threads
@@ -136,17 +138,19 @@ export async function ort_wasm_benchmark(n: number, k: number, m: number, count:
     times[i] = end - start
   }
 
-  const sum_time = times.reduce((sum, current) => sum + current, 0)
-  const avg_time = sum_time / count
+  return calculate_mean_confidence_interval(times)
 
-  const standard_deviation = Math.sqrt(
-    times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / count
-  )
-  const sem = standard_deviation / Math.sqrt(count)
-  const confidence_interval = 1.96 * sem
-
-  return {
-    avg: avg_time,
-    interval: confidence_interval
-  }
+  // const sum_time = times.reduce((sum, current) => sum + current, 0)
+  // const avg_time = sum_time / count
+  //
+  // const standard_deviation = Math.sqrt(
+  //   times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / (count - 1)
+  // )
+  // const sem = standard_deviation / Math.sqrt(count)
+  // const confidence_interval = 1.96 * sem
+  //
+  // return {
+  //   avg: avg_time,
+  //   interval: confidence_interval
+  // }
 }

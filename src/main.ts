@@ -33,21 +33,21 @@ document.getElementById('tfjs-wasm').onclick = async _ => {
   const threads = tfjs_cpu_count_field.valueAsNumber
   const simd_enabled = (document.querySelector('input[name="tfjs-simd"]:checked') as HTMLInputElement).value === 'yes'
   const output = await tfjs_wasm_benchmark(params.N, params.K, params.M, params.count, params.warmup, threads, simd_enabled)
-  if (output.avg > 0) {
-    console.log(`TFJS WASM time = ${output.avg.toPrecision(3)}±${output.interval.toPrecision(3)}`)
+  if (output.mean > 0) {
+    console.log(`TFJS WASM time = ${output.mean}±${output.confidence_interval}`)
   }
 }
 
 document.getElementById('tfjs-webgl').onclick = async _ => {
   const params = get_parameters()
   const output = await tfjs_webgl_benchmark(params.N, params.K, params.M, params.count, params.warmup)
-  console.log(`TFJS WEBGL time = ${output.avg.toPrecision(3)}±${output.interval.toPrecision(3)}`)
+  console.log(`TFJS WEBGL time = ${output.mean}±${output.confidence_interval}`)
 }
 
 document.getElementById('tfjs-cpu').onclick = async _ => {
   const params = get_parameters()
   const output = await tfjs_cpu_benchmark(params.N, params.K, params.M, params.count, params.warmup)
-  console.log(`TFJS CPU time = ${output.avg.toPrecision(3)}±${output.interval.toPrecision(3)}`)
+  console.log(`TFJS CPU time = ${output.mean}±${output.confidence_interval}`)
 }
 
 document.getElementById('ort-wasm').onclick = async _ => {
@@ -56,13 +56,13 @@ document.getElementById('ort-wasm').onclick = async _ => {
   const threads = ort_cpu_count_field.valueAsNumber
   const simd_enabled = (document.querySelector('input[name="ort-simd"]:checked') as HTMLInputElement).value === 'yes'
   const output = await ort_wasm_benchmark(params.N, params.K, params.M, params.count, params.warmup, threads, simd_enabled)
-  console.log(`ORT WASM time = ${output.avg.toPrecision(3)}±${output.interval.toPrecision(3)}`)
+  console.log(`ORT WASM time = ${output.mean}±${output.confidence_interval}`)
 }
 
 document.getElementById('ort-webgl').onclick = async _ => {
   const params = get_parameters()
   const output = await ort_webgl_benchmark(params.N, params.K, params.M, params.count, params.warmup)
-  console.log(`ORT WEBGL time = ${output.avg.toPrecision(3)}±${output.interval.toPrecision(3)}`)
+  console.log(`ORT WEBGL time = ${output.mean}±${output.confidence_interval}`)
 }
 
 get_threads().then((threads) => {
