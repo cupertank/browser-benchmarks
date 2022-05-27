@@ -84,20 +84,6 @@ export async function tfjs_wasm_benchmark(n: number, k: number, m: number, count
     dest.dispose()
   }
   return calculate_mean_confidence_interval(times)
-
-  // const sum_time = times.reduce((sum, current) => sum + current, 0)
-  // const avg_time = sum_time / count
-  //
-  // const standard_deviation = Math.sqrt(
-  //   times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / (count - 1)
-  // )
-  // const sem = standard_deviation / Math.sqrt(count)
-  // const confidence_interval = 1.96 * sem
-  //
-  // return {
-  //   avg: avg_time,
-  //   interval: confidence_interval
-  // }
 }
 
 export async function tfjs_webgl_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<Statistics> {
@@ -144,20 +130,6 @@ export async function tfjs_webgl_benchmark(n: number, k: number, m: number, coun
   }
 
   return calculate_mean_confidence_interval(times)
-
-  // const sum_time = times.reduce((sum, current) => sum + current, 0)
-  // const avg_time = sum_time / count
-  //
-  // const standard_deviation = Math.sqrt(
-  //   times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / (count - 1)
-  // )
-  // const sem = standard_deviation / Math.sqrt(count)
-  // const confidence_interval = 1.96 * sem
-  //
-  // return {
-  //   avg: avg_time,
-  //   interval: confidence_interval
-  // }
 }
 
 export async function tfjs_cpu_benchmark(n: number, k: number, m: number, count: number, warmup: number): Promise<Statistics> {
@@ -204,20 +176,6 @@ export async function tfjs_cpu_benchmark(n: number, k: number, m: number, count:
   }
 
   return calculate_mean_confidence_interval(times)
-
-  // const sum_time = times.reduce((sum, current) => sum + current, 0)
-  // const avg_time = sum_time / count
-  //
-  // const standard_deviation = Math.sqrt(
-  //   times.reduce((sum, current) => sum + Math.pow(current - avg_time, 2)) / (count - 1)
-  // )
-  // const sem = standard_deviation / Math.sqrt(count)
-  // const confidence_interval = 1.96 * sem
-  //
-  // return {
-  //   avg: avg_time,
-  //   interval: confidence_interval
-  // }
 }
 
 export async function get_threads(): Promise<number> {
