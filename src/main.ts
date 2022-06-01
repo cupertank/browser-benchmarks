@@ -69,7 +69,7 @@ async function create_benchmark_paragraph(benchmark_fn: () => Promise<Statistics
   block_inputs()
   const paragraph = document.createElement('p')
   paragraph.innerHTML = 'Executing benchmark'
-  paragraph.setAttribute('style', 'border:1px; border-style:solid; border-color:#FFFFF; padding: 1em;')
+  paragraph.setAttribute('style', 'border:1px; border-style:solid; border-color:#FFFFF; padding: 1em; width: fit-content')
   benchmark_results.appendChild(paragraph)
   paragraph.scrollIntoView()
 
